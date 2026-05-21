@@ -1,0 +1,476 @@
+fileFormatVersion: 2
+guid: 9f6b586860d4eb54da00348674e34f71
+ModelImporter:
+  serializedVersion: 21300
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Face1
+    second: {fileID: 2100000, guid: 20f39882f2513024ba38a217ca678a18, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Klav
+    second: {fileID: 2100000, guid: 101752e0bb368e14688605eea40ef002, type: 2}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 1
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 1
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton:
+    - name: Klaw_test_new(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Klav_geo
+      parentName: Klaw_test_new(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Klav_Reference
+      parentName: Klaw_test_new(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Klav_Hips
+      parentName: Klaw_test_new(Clone)
+      position: {x: 0, y: 2.4686651, z: -0.22516707}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Klav_tail
+      parentName: Klav_Hips
+      position: {x: -0, y: -0.3048037, z: -0.33273068}
+      rotation: {x: 0.292812, y: -0.292812, z: 0.6436313, w: 0.6436313}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Klav_tail1
+      parentName: Klav_tail
+      position: {x: -0.45211157, y: 2.7863527e-33, z: -1.0622313e-15}
+      rotation: {x: 0.000000014901159, y: -0.12892641, z: 0.000000029802319, w: 0.99165416}
+      scale: {x: 0.9999999, y: 1, z: 0.99999976}
+    - name: Klav_tail2
+      parentName: Klav_tail1
+      position: {x: -0.496063, y: 6.1144485e-33, z: 3.1075754e-16}
+      rotation: {x: 0.00000003663464, y: -0.17079367, z: 0.00000008840451, w: 0.98530686}
+      scale: {x: 1.0000001, y: 0.9999999, z: 1.0000001}
+    - name: Klav_tail3
+      parentName: Klav_tail2
+      position: {x: -0.5306919, y: 6.541283e-33, z: -6.46145e-17}
+      rotation: {x: -0.00000016929219, y: -0.20688039, z: -0.00000001308848, w: 0.9783663}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000004}
+    - name: Klav_tail4
+      parentName: Klav_tail3
+      position: {x: -0.5034979, y: 9.3091365e-33, z: 1.3266937e-16}
+      rotation: {x: 0.00000003574734, y: -0.16899133, z: -0.00000007066657, w: 0.9856175}
+      scale: {x: 1.0000005, y: 1.0000002, z: 1.0000002}
+    - name: Klav_tail5
+      parentName: Klav_tail4
+      position: {x: -0.61931896, y: -2.8626358e-32, z: 8.476888e-17}
+      rotation: {x: -0, y: -0, z: 4.440891e-16, w: 1}
+      scale: {x: 0.99999994, y: 1, z: 0.9999998}
+    - name: Klav_LeftUpLeg
+      parentName: Klav_Hips
+      position: {x: -0.8833866, y: -0.15724008, z: 0.15539734}
+      rotation: {x: 0.4363106, y: 0.55644685, z: 0.4363106, w: 0.55644685}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000002}
+    - name: Klav_LeftLeg
+      parentName: Klav_LeftUpLeg
+      position: {x: -0.91565764, y: -1.4210854e-16, z: 4.1908e-17}
+      rotation: {x: -0.6777939, y: -0.2014829, z: 0.20148283, w: 0.67779404}
+      scale: {x: 1.0000002, y: 1.0000004, z: 1.0000001}
+    - name: Klav_LeftFoot
+      parentName: Klav_LeftLeg
+      position: {x: -0.9920878, y: 5.4435606e-15, z: 7.105427e-17}
+      rotation: {x: -0.000000059604645, y: 0.61266506, z: -0.00000010430813, w: 0.79034275}
+      scale: {x: 1, y: 1.0000002, z: 1.0000001}
+    - name: Klav_LeftToeBase
+      parentName: Klav_LeftFoot
+      position: {x: -0.7535481, y: 1.5831722e-17, z: -1.4210854e-16}
+      rotation: {x: 0.3333514, y: -0.33335146, z: -0.6235999, w: 0.62359995}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Klav_RightUpLeg
+      parentName: Klav_Hips
+      position: {x: 0.8833866, y: -0.15724008, z: 0.15539734}
+      rotation: {x: 0.4363106, y: 0.55644685, z: 0.4363106, w: 0.55644685}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000002}
+    - name: Klav_RightLeg
+      parentName: Klav_RightUpLeg
+      position: {x: -0.91565764, y: -1.9293775e-16, z: -8.921208e-18}
+      rotation: {x: -0.6777939, y: -0.2014829, z: 0.20148283, w: 0.67779404}
+      scale: {x: 1.0000002, y: 1.0000004, z: 1.0000001}
+    - name: Klav_RightFoot
+      parentName: Klav_RightLeg
+      position: {x: -0.9920878, y: -5.0623453e-15, z: 1.7763567e-16}
+      rotation: {x: -0.00000008940697, y: 0.61266506, z: 0.00000023841858, w: 0.79034275}
+      scale: {x: 1, y: 1.0000002, z: 1.0000002}
+    - name: Klav_RightToeBase
+      parentName: Klav_RightFoot
+      position: {x: -0.7535481, y: -2.038173e-17, z: 7.105427e-17}
+      rotation: {x: 0.33335146, y: -0.3333514, z: -0.6236001, w: 0.6235997}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Klav_Spine
+      parentName: Klav_Hips
+      position: {x: -2.4424906e-17, y: 0.5039027, z: -0.021578472}
+      rotation: {x: -0.026084712, y: -0, z: -0, w: 0.9996598}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Klav_Spine1
+      parentName: Klav_Spine
+      position: {x: 1.3412056e-15, y: 0.5297757, z: -2.1671554e-15}
+      rotation: {x: 0.06363428, y: -0, z: -0, w: 0.99797326}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    - name: Klav_Spine2
+      parentName: Klav_Spine1
+      position: {x: -2.3560976e-16, y: 0.5284746, z: -0.02759839}
+      rotation: {x: -0.73318094, y: -0, z: -0, w: 0.6800336}
+      scale: {x: 1, y: 1.0000005, z: 1.0000005}
+    - name: Klav_LeftShoulder
+      parentName: Klav_Spine2
+      position: {x: -0.8493013, y: -0.26220173, z: 0.24228708}
+      rotation: {x: 0.70451665, y: -0.06046782, z: 0.060467813, w: 0.7045166}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Klav_LeftArm
+      parentName: Klav_LeftShoulder
+      position: {x: -0.5312054, y: 6.8479834e-16, z: 3.1725987e-16}
+      rotation: {x: -0, y: 0.0000000037252899, z: -0.044219118, w: 0.9990219}
+      scale: {x: 0.99999994, y: 1.0000001, z: 1}
+    - name: Klav_LeftForeArm
+      parentName: Klav_LeftArm
+      position: {x: -1.0762241, y: -3.2682142e-16, z: -1.3363071e-16}
+      rotation: {x: 4.8780736e-11, y: 2.3043787e-12, z: -0.013108803, w: 0.99991405}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Klav_LeftHand
+      parentName: Klav_LeftForeArm
+      position: {x: -0.8979037, y: -1.9135577e-32, z: 3.1907576e-18}
+      rotation: {x: -0.0043575764, y: 0.10472679, z: 0.035665516, w: 0.9938517}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Klav_LeftHandThumb1
+      parentName: Klav_LeftHand
+      position: {x: -0.3243474, y: -1.6023206e-17, z: 3.4194177e-16}
+      rotation: {x: -0.014809322, y: 0.21386887, z: -0.017742092, w: 0.976589}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Klav_LeftHandThumb2
+      parentName: Klav_LeftHandThumb1
+      position: {x: -0.28056002, y: -1.154815e-16, z: 3.3267092e-16}
+      rotation: {x: -0.012022103, y: -0.016580025, z: -0.037261344, w: 0.9990957}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1}
+    - name: Klav_LeftHandThumb3
+      parentName: Klav_LeftHandThumb2
+      position: {x: -0.18684612, y: -3.5203385e-16, z: -3.7327355e-16}
+      rotation: {x: -0.027406655, y: -0.040361468, z: -0.0039986405, w: 0.9988012}
+      scale: {x: 0.9999998, y: 1, z: 1.0000001}
+    - name: Klav_LeftHandThumb4
+      parentName: Klav_LeftHandThumb3
+      position: {x: -0.2665177, y: -4.8082794e-16, z: 2.958941e-17}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1}
+    - name: Klav_LeftHandIndex1
+      parentName: Klav_LeftHand
+      position: {x: -0.7310252, y: 0.13000277, z: -0.10990111}
+      rotation: {x: 0.005466428, y: -0.13323386, z: -0.04624755, w: 0.98999}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Klav_LeftHandIndex2
+      parentName: Klav_LeftHandIndex1
+      position: {x: -0.22934574, y: 1.4556329e-17, z: 2.6390193e-16}
+      rotation: {x: 0.0000000041909503, y: -0.01186086, z: -0.00018869332, w: 0.9999297}
+      scale: {x: 1, y: 0.99999994, z: 1.0000001}
+    - name: Klav_LeftHandIndex3
+      parentName: Klav_LeftHandIndex2
+      position: {x: -0.18911241, y: -6.004106e-16, z: 6.5234375e-16}
+      rotation: {x: 0.00015038275, y: 0.0039937184, z: 0.037851013, w: 0.99927545}
+      scale: {x: 1, y: 0.99999994, z: 0.9999998}
+    - name: Klav_LeftHandIndex4
+      parentName: Klav_LeftHandIndex3
+      position: {x: -0.25829217, y: 4.638908e-16, z: 1.7957473e-16}
+      rotation: {x: 0.00045690383, y: 0.012088426, z: -0.07547033, w: 0.99707466}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Klav_LeftHandMiddle1
+      parentName: Klav_LeftHand
+      position: {x: -0.6513961, y: 0.16205414, z: -0.24100354}
+      rotation: {x: 0.005502602, y: -0.13397695, z: -0.04572865, w: 0.9899135}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Klav_LeftHandMiddle2
+      parentName: Klav_LeftHandMiddle1
+      position: {x: -0.23110855, y: 3.898341e-16, z: 9.655932e-17}
+      rotation: {x: 0.000000012340022, y: 0.0001226589, z: -0.00016926744, w: 1}
+      scale: {x: 1, y: 0.99999994, z: 0.99999994}
+    - name: Klav_LeftHandMiddle3
+      parentName: Klav_LeftHandMiddle2
+      position: {x: -0.23143287, y: 1.5623731e-14, z: 1.4053527e-14}
+      rotation: {x: -0.0000000145305314, y: -0.00049124646, z: 0.00012180442, w: 0.9999999}
+      scale: {x: 1, y: 0.99999994, z: 0.99999994}
+    - name: Klav_LeftHandMiddle4
+      parentName: Klav_LeftHandMiddle3
+      position: {x: -0.2822353, y: 7.255705e-15, z: 2.3811568e-15}
+      rotation: {x: 0.00000010605449, y: 0.0007208659, z: -0.000070700706, w: 0.99999976}
+      scale: {x: 0.9999999, y: 0.99999994, z: 0.99999994}
+    - name: Klav_LeftHandRing1
+      parentName: Klav_LeftHand
+      position: {x: -0.56582713, y: 0.16017747, z: -0.37576082}
+      rotation: {x: 0.0055030556, y: -0.13398375, z: -0.04572445, w: 0.9899128}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    - name: Klav_LeftHandRing2
+      parentName: Klav_LeftHandRing1
+      position: {x: -0.20843324, y: 1.2212749e-15, z: -9.126729e-19}
+      rotation: {x: -0.0000000023865139, y: 0.00013186036, z: -0.00016535619, w: 1}
+      scale: {x: 0.9999999, y: 1, z: 1}
+    - name: Klav_LeftHandRing3
+      parentName: Klav_LeftHandRing2
+      position: {x: -0.19695383, y: 1.7859812e-14, z: 1.0494695e-14}
+      rotation: {x: -0.000000018390946, y: -0.0004831924, z: 0.00012232413, w: 0.9999999}
+      scale: {x: 0.9999999, y: 0.9999998, z: 0.99999994}
+    - name: Klav_LeftHandRing4
+      parentName: Klav_LeftHandRing3
+      position: {x: -0.25781122, y: -1.248321e-14, z: -4.9025954e-15}
+      rotation: {x: 0.00000011741935, y: 0.0007242261, z: -0.00006972373, w: 0.99999976}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Klav_LeftHandPinky1
+      parentName: Klav_LeftHand
+      position: {x: -0.4665078, y: 0.13320693, z: -0.4891467}
+      rotation: {x: 0.0055030263, y: -0.1339847, z: -0.04572397, w: 0.98991275}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Klav_LeftHandPinky2
+      parentName: Klav_LeftHandPinky1
+      position: {x: -0.16362329, y: -3.2810054e-16, z: -5.4470257e-17}
+      rotation: {x: 0.0000000012805685, y: -0.000000022351742, z: -0.00020662928, w: 1}
+      scale: {x: 0.9999999, y: 1, z: 1}
+    - name: Klav_LeftHandPinky3
+      parentName: Klav_LeftHandPinky2
+      position: {x: -0.14961044, y: 2.6147971e-14, z: -7.105427e-17}
+      rotation: {x: -0.0000000060947434, y: 0.000000081955406, z: 0.00021880795, w: 1}
+      scale: {x: 1, y: 0.99999994, z: 0.99999994}
+    - name: Klav_LeftHandPinky4
+      parentName: Klav_LeftHandPinky3
+      position: {x: -0.2217117, y: -3.6410626e-14, z: -1.3044426e-17}
+      rotation: {x: 0.0000000094122745, y: -0.00000011920833, z: -0.0002212808, w: 1}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    - name: Klav_RightShoulder
+      parentName: Klav_Spine2
+      position: {x: 0.8493013, y: -0.26220173, z: 0.24228708}
+      rotation: {x: 0.060467813, y: 0.7045166, z: 0.70451665, w: -0.06046782}
+      scale: {x: 1.0000006, y: 1, z: 1.0000006}
+    - name: Klav_RightArm
+      parentName: Klav_RightShoulder
+      position: {x: -0.5312054, y: 5.226153e-16, z: 1.1332634e-15}
+      rotation: {x: -4.6566123e-10, y: -0.000000005587935, z: -0.044219445, w: 0.9990219}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000002}
+    - name: Klav_RightForeArm
+      parentName: Klav_RightArm
+      position: {x: -1.0762241, y: -5.833698e-16, z: -5.8308875e-16}
+      rotation: {x: -4.878075e-11, y: -2.3043787e-12, z: -0.013108807, w: 0.99991405}
+      scale: {x: 1.0000005, y: 1, z: 1.0000005}
+    - name: Klav_RightHand
+      parentName: Klav_RightForeArm
+      position: {x: -0.8979037, y: -1.7053025e-15, z: -3.9615233e-16}
+      rotation: {x: 0.0043576066, y: -0.1047268, z: 0.03566498, w: 0.9938518}
+      scale: {x: 1.0000007, y: 1, z: 1.0000005}
+    - name: Klav_RightHandThumb1
+      parentName: Klav_RightHand
+      position: {x: -0.3243474, y: 1.1930021e-16, z: -7.855346e-16}
+      rotation: {x: 0.014808767, y: -0.21386929, z: -0.017740715, w: 0.9765889}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Klav_RightHandThumb2
+      parentName: Klav_RightHandThumb1
+      position: {x: -0.28056002, y: -3.763566e-16, z: 3.7966378e-16}
+      rotation: {x: 0.012022088, y: 0.01658101, z: -0.037262157, w: 0.9990957}
+      scale: {x: 0.99999994, y: 1.0000002, z: 0.9999998}
+    - name: Klav_RightHandThumb3
+      parentName: Klav_RightHandThumb2
+      position: {x: -0.18684612, y: -4.8748604e-16, z: -6.223225e-17}
+      rotation: {x: 0.027406508, y: 0.040360723, z: -0.0039992603, w: 0.99880123}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Klav_RightHandThumb4
+      parentName: Klav_RightHandThumb3
+      position: {x: -0.2665177, y: -2.597022e-16, z: 6.585227e-16}
+      rotation: {x: -0, y: -0, z: -1.1641534e-10, w: 1}
+      scale: {x: 1.0000002, y: 1, z: 1}
+    - name: Klav_RightHandIndex1
+      parentName: Klav_RightHand
+      position: {x: -0.7310252, y: 0.13000277, z: 0.10990111}
+      rotation: {x: -0.005466347, y: 0.13323371, z: -0.046247322, w: 0.98999}
+      scale: {x: 1, y: 1.0000001, z: 0.99999994}
+    - name: Klav_RightHandIndex2
+      parentName: Klav_RightHandIndex1
+      position: {x: -0.22934574, y: -1.01461464e-16, z: 7.5655606e-16}
+      rotation: {x: -0.000000013766108, y: 0.011860867, z: -0.00018868307, w: 0.99992967}
+      scale: {x: 1.0000004, y: 0.99999994, z: 1.0000005}
+    - name: Klav_RightHandIndex3
+      parentName: Klav_RightHandIndex2
+      position: {x: -0.18911241, y: -3.394252e-16, z: 7.4292757e-16}
+      rotation: {x: -0.00015037415, y: -0.0039937347, z: 0.03785102, w: 0.99927545}
+      scale: {x: 1.000001, y: 0.99999994, z: 1.0000007}
+    - name: Klav_RightHandIndex4
+      parentName: Klav_RightHandIndex3
+      position: {x: -0.25829217, y: -6.6631365e-16, z: 9.185734e-18}
+      rotation: {x: -0.00045682737, y: -0.012088429, z: 0.0000027697483, w: 0.99992687}
+      scale: {x: 1.0000002, y: 1, z: 1.0000004}
+    - name: Klav_RightHandMiddle1
+      parentName: Klav_RightHand
+      position: {x: -0.6513961, y: 0.16205414, z: 0.24100354}
+      rotation: {x: -0.0055027707, y: 0.13397713, z: -0.04572913, w: 0.9899135}
+      scale: {x: 1, y: 1.0000001, z: 0.99999994}
+    - name: Klav_RightHandMiddle2
+      parentName: Klav_RightHandMiddle1
+      position: {x: -0.23110855, y: -6.8757587e-16, z: 1.4937791e-16}
+      rotation: {x: -0.0000000119325705, y: -0.00012266636, z: -0.00016926735, w: 1}
+      scale: {x: 1.0000001, y: 0.99999994, z: 1.0000001}
+    - name: Klav_RightHandMiddle3
+      parentName: Klav_RightHandMiddle2
+      position: {x: -0.23143287, y: -1.3985288e-14, z: 1.3014826e-14}
+      rotation: {x: 0.000000033941404, y: 0.00049125403, z: 0.000121795616, w: 0.99999994}
+      scale: {x: 1.0000001, y: 0.99999994, z: 1}
+    - name: Klav_RightHandMiddle4
+      parentName: Klav_RightHandMiddle3
+      position: {x: -0.2822353, y: -3.7773743e-14, z: 1.2895038e-14}
+      rotation: {x: -0.000000025791316, y: -0.000720866, z: -3.5862393e-11, w: 0.9999998}
+      scale: {x: 0.99999994, y: 0.99999994, z: 1}
+    - name: Klav_RightHandRing1
+      parentName: Klav_RightHand
+      position: {x: -0.56582713, y: 0.16017747, z: 0.37576082}
+      rotation: {x: -0.005503239, y: 0.133984, z: -0.045725234, w: 0.9899128}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Klav_RightHandRing2
+      parentName: Klav_RightHandRing1
+      position: {x: -0.20843324, y: -7.118789e-16, z: -4.4398585e-17}
+      rotation: {x: -0.000000008760253, y: -0.00013186038, z: -0.00016535001, w: 1}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Klav_RightHandRing3
+      parentName: Klav_RightHandRing2
+      position: {x: -0.19695383, y: -1.704202e-14, z: 1.04790215e-14}
+      rotation: {x: 0.00000003215981, y: 0.00048319253, z: 0.00012232231, w: 0.99999994}
+      scale: {x: 0.99999994, y: 0.9999998, z: 0.99999994}
+    - name: Klav_RightHandRing4
+      parentName: Klav_RightHandRing3
+      position: {x: -0.25781122, y: -1.32049286e-14, z: 5.8053487e-15}
+      rotation: {x: -0.00000002527021, y: -0.0007242337, z: -6.800076e-12, w: 0.9999998}
+      scale: {x: 0.99999994, y: 0.99999994, z: 1}
+    - name: Klav_RightHandPinky1
+      parentName: Klav_RightHand
+      position: {x: -0.4665078, y: 0.13320693, z: 0.4891467}
+      rotation: {x: -0.005503128, y: 0.13398495, z: -0.04572476, w: 0.9899126}
+      scale: {x: 1, y: 1.0000001, z: 0.99999994}
+    - name: Klav_RightHandPinky2
+      parentName: Klav_RightHandPinky1
+      position: {x: -0.16362329, y: -9.662971e-16, z: 5.885021e-17}
+      rotation: {x: 1.1641531e-10, y: 0.000000029802319, z: -0.00020661781, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Klav_RightHandPinky3
+      parentName: Klav_RightHandPinky2
+      position: {x: -0.14961044, y: -1.1368683e-14, z: 7.105427e-17}
+      rotation: {x: -3.3883338e-10, y: -0.00000008195642, z: 0.00021881095, w: 1}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Klav_RightHandPinky4
+      parentName: Klav_RightHandPinky3
+      position: {x: -0.2217117, y: 5.4652958e-14, z: -2.1920845e-17}
+      rotation: {x: -1.7326023e-10, y: 0.000000111758695, z: 4.9476506e-10, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Klav_Neck
+      parentName: Klav_Spine2
+      position: {x: -3.6907013e-15, y: -0.13980038, z: 0.52905476}
+      rotation: {x: 0.5, y: -0.5, z: -0.50000006, w: -0.50000006}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000004}
+    - name: Klav_Head
+      parentName: Klav_Neck
+      position: {x: -0.27710164, y: 2.2990004e-16, z: -2.6169083e-16}
+      rotation: {x: -0.000000074505806, y: 0.71519303, z: -0.000000029802322, w: 0.69892704}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1.0000001}
+    - name: Klav_HeadTop
+      parentName: Klav_Head
+      position: {x: 6.0063064e-16, y: -4.756179e-16, z: -4.180273}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.506
+    armStretch: 0.075
+    legStretch: 0.05
+    feetSpacing: 0.006
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
