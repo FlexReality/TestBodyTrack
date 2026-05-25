@@ -280,22 +280,22 @@ namespace FlexReality.BodyTracking.EditorTools
             if (loaded.Count == 0) return 0;
 
             int placed = 0;
-            // Inner row — start at x=±9, clear of the road (±2.25) and lane pads.
+            // Inner row — min x=±12 so large tree crowns stay off the road.
             for (float z = -6f; z <= 35f; z += Random.Range(3f, 4.5f))
             {
-                placed += PlantOne(parent, loaded, new Vector3(-9f - Random.value * 1.6f, 0f, z + Random.Range(-0.6f, 0.6f)), 100f, 150f);
-                placed += PlantOne(parent, loaded, new Vector3( 9f + Random.value * 1.6f, 0f, z + Random.Range(-0.6f, 0.6f)), 100f, 150f);
+                placed += PlantOne(parent, loaded, new Vector3(-12f - Random.value * 2f, 0f, z + Random.Range(-0.6f, 0.6f)), 100f, 150f);
+                placed += PlantOne(parent, loaded, new Vector3( 12f + Random.value * 2f, 0f, z + Random.Range(-0.6f, 0.6f)), 100f, 150f);
             }
             // Outer second row — parallax depth.
             for (float z = -8f; z <= 38f; z += Random.Range(4f, 6f))
             {
-                placed += PlantOne(parent, loaded, new Vector3(-16f - Random.value * 5f, 0f, z), 130f, 180f);
-                placed += PlantOne(parent, loaded, new Vector3( 16f + Random.value * 5f, 0f, z), 130f, 180f);
+                placed += PlantOne(parent, loaded, new Vector3(-18f - Random.value * 4f, 0f, z), 130f, 180f);
+                placed += PlantOne(parent, loaded, new Vector3( 18f + Random.value * 4f, 0f, z), 130f, 180f);
             }
-            // Horizon cluster — also keep |x| > 8 so recycled trees never land on road.
+            // Horizon cluster — |x| > 10 so recycled trees never land on road.
             for (int i = 0; i < 12; i++)
             {
-                float hx = Random.value < 0.5f ? Random.Range(-22f, -8f) : Random.Range(8f, 22f);
+                float hx = Random.value < 0.5f ? Random.Range(-25f, -10f) : Random.Range(10f, 25f);
                 placed += PlantOne(parent, loaded,
                     new Vector3(hx, 0f, Random.Range(40f, 60f)),
                     150f, 220f);
@@ -333,10 +333,10 @@ namespace FlexReality.BodyTracking.EditorTools
             while (placed < count && attempts < count * 6)
             {
                 attempts++;
-                // Keep props outside x=±5 so the road + avatar area stays clear.
+                // Keep props outside x=±9 — tree crowns at scale 15-30 still need margin.
                 float x = (Random.value < 0.5f
-                    ? Random.Range(-16f, -5.0f)
-                    : Random.Range(  5.0f, 16f));
+                    ? Random.Range(-18f, -9.0f)
+                    : Random.Range(  9.0f, 18f));
                 float z = Random.Range(-6f, 35f);
                 placed += PlantOne(parent, loaded, new Vector3(x, 0f, z), scaleMin, scaleMax);
             }
