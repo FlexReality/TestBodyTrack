@@ -50,38 +50,64 @@ namespace FlexReality.BodyTracking
             spinSpeed = Random.Range(120f, 320f);
         }
 
+        // Bright palette for number balls — vivid enough to read from 14 units away.
+        private static readonly Color[] BallColors =
+        {
+            new Color(0.95f, 0.25f, 0.25f), // red
+            new Color(0.20f, 0.55f, 1.00f), // blue
+            new Color(1.00f, 0.75f, 0.05f), // yellow
+            new Color(0.20f, 0.82f, 0.30f), // green
+            new Color(1.00f, 0.45f, 0.10f), // orange
+            new Color(0.75f, 0.20f, 1.00f), // purple
+            new Color(0.10f, 0.85f, 0.85f), // cyan
+            new Color(1.00f, 0.30f, 0.75f), // pink
+        };
+
         // Call after Launch() to turn this into a math answer obstacle.
         public void SetAsMathAnswer(int value, bool isCorrect)
         {
             answerValue = value;
             isMathObstacle = true;
 
-            // Slow Y-axis carousel so the number stays readable.
+            // Slow Y-axis spin so the number stays readable.
             spinAxis = Vector3.up;
-            spinSpeed = 50f;
+            spinSpeed = 60f;
 
-            // Hide the food/cube mesh — only the number label should be visible.
+            // Replace the default cube with a sphere and apply a random bright colour.
             foreach (var mr in GetComponentsInChildren<MeshRenderer>())
                 mr.enabled = false;
 
+            var ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            ball.name = "NumberBall";
+            ball.transform.SetParent(transform, false);
+            ball.transform.localPosition = Vector3.zero;
+            ball.transform.localScale    = Vector3.one * 0.85f;
+            Destroy(ball.GetComponent<Collider>());
+
+            var ballColor = BallColors[Random.Range(0, BallColors.Length)];
+            var mr2 = ball.GetComponent<MeshRenderer>();
+            if (mr2 != null)
+            {
+                var mat = new Material(Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard"));
+                mat.color = ballColor;
+                mat.SetFloat("_Smoothness", 0.6f);
+                mr2.sharedMaterial = mat;
+            }
+
+            // Number label — white bold text, scale-compensated so it's always
+            // the same physical size regardless of parent scale.
             var labelObj = new GameObject("AnswerLabel");
             labelObj.transform.SetParent(transform, false);
-            labelObj.transform.localPosition = Vector3.zero;
-
-            // Neutralize the parent's world scale so the label is always
-            // the same physical size regardless of whether this is a fallback
-            // cube (scale 1) or a scaled FBX food model (scale ~40).
+            labelObj.transform.localPosition = new Vector3(0f, 0f, -0.44f); // face toward camera
             float parentWorldScale = Mathf.Max(transform.lossyScale.x, 0.001f);
             labelObj.transform.localScale = Vector3.one / parentWorldScale;
 
             var tmp = labelObj.AddComponent<TextMeshPro>();
-            tmp.text = value.ToString();
-            // TMP 3D: fontSize ≈ worldUnits * 10 at neutralized scale.
-            // fontSize 8 → ~0.8 world units tall — large and readable from 14 units away.
-            tmp.fontSize = 8f;
+            tmp.text      = value.ToString();
+            tmp.fontSize  = 9f;
             tmp.fontStyle = FontStyles.Bold;
             tmp.alignment = TextAlignmentOptions.Center;
-            tmp.color = Color.white;
+            tmp.color     = Color.white;
             tmp.rectTransform.sizeDelta = new Vector2(2f, 2f);
         }
 
