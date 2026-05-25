@@ -2,106 +2,65 @@ using UnityEngine;
 
 namespace FlexReality.BodyTracking
 {
-    // Scrolls trees from in front of the player toward the camera to create
-    // an endless-runner illusion. Trees are spawned procedurally on the left
-    // and right sides; the centre road stays clear.
-    //
-    // Setup: add this component to any empty GameObject in the scene.
-    // No manual wiring needed — it creates everything automatically.
+    // Scrolls existing scene trees toward the player to create an endless-runner
+    // illusion. Assign the parent GameObject that holds all the forest trees to
+    // ForestParent — the scroller pools and recycles its children automatically.
     public class EnvironmentScroller : MonoBehaviour
     {
+        [Header("Source")]
+        [Tooltip("Parent whose children are the trees/props to scroll. Drag your forest root here.")]
+        [SerializeField] private Transform forestParent;
+
         [Header("Scroll")]
         [SerializeField] private float scrollSpeed = 7f;
 
-        [Header("Layout")]
-        [Tooltip("Half-width of the clear centre road (no trees inside this range).")]
-        [SerializeField] private float roadHalfWidth = 3.2f;
-        [Tooltip("How far to the side trees can spawn.")]
-        [SerializeField] private float sideSpread = 9f;
-        [Tooltip("How far ahead trees are placed when spawned/recycled.")]
-        [SerializeField] private float spawnDepth = 55f;
-        [Tooltip("How far behind the player a tree must travel before being recycled.")]
-        [SerializeField] private float recycleZ = 10f;
-        [Tooltip("Total number of trees in the pool (split evenly left/right).")]
-        [SerializeField] private int treeCount = 36;
+        [Header("Recycle")]
+        [Tooltip("Z distance behind the player at which an object is teleported to the front.")]
+        [SerializeField] private float recycleZ = 12f;
+        [Tooltip("Z distance in front of the player where recycled objects reappear.")]
+        [SerializeField] private float respawnZ = 55f;
 
-        private Transform[] trees;
+        private Transform[] _pool;
+        private float[]     _poolOrigX; // keep original X so recycled trees stay on their side
 
         private void Start()
         {
-            trees = new Transform[treeCount];
-            for (int i = 0; i < treeCount; i++)
+            if (forestParent == null)
             {
-                int side = (i % 2 == 0) ? -1 : 1; // alternate left/right
-                float startZ = (float)i / treeCount * spawnDepth;
-                trees[i] = SpawnTree(side, startZ);
+                Debug.LogWarning("[EnvironmentScroller] ForestParent not assigned. " +
+                                 "Drag the forest root GameObject into the ForestParent field.", this);
+                enabled = false;
+                return;
+            }
+
+            int count = forestParent.childCount;
+            _pool      = new Transform[count];
+            _poolOrigX = new float[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                _pool[i]      = forestParent.GetChild(i);
+                _poolOrigX[i] = _pool[i].position.x;
             }
         }
 
         private void Update()
         {
             float delta = scrollSpeed * Time.deltaTime;
-            foreach (var t in trees)
+
+            for (int i = 0; i < _pool.Length; i++)
             {
+                var t = _pool[i];
                 t.position += Vector3.back * delta;
+
                 if (t.position.z < -recycleZ)
                 {
-                    int side = t.position.x < 0 ? -1 : 1;
                     t.position = new Vector3(
-                        t.position.x,
+                        _poolOrigX[i],                          // keep original side (left/right)
                         t.position.y,
-                        spawnDepth + Random.Range(0f, 8f));
+                        respawnZ + Random.Range(0f, 10f));      // small random spread so trees don't clump
                 }
             }
-        }
-
-        private Transform SpawnTree(int side, float startZ)
-        {
-            var root = new GameObject("Tree");
-            root.transform.SetParent(transform, false);
-
-            float xRand = Random.Range(roadHalfWidth + 0.5f, roadHalfWidth + sideSpread);
-            float x = side * xRand;
-            float scale = Random.Range(0.7f, 1.4f);
-            root.transform.position = new Vector3(x, 0f, startZ);
-            root.transform.localScale = Vector3.one * scale;
-
-            BuildTreeMesh(root.transform);
-            return root.transform;
-        }
-
-        private static void BuildTreeMesh(Transform root)
-        {
-            // Trunk — brown cylinder
-            var trunk = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            trunk.name = "Trunk";
-            trunk.transform.SetParent(root, false);
-            trunk.transform.localPosition = new Vector3(0f, 1f, 0f);
-            trunk.transform.localScale    = new Vector3(0.28f, 1f, 0.28f);
-            SetColor(trunk, new Color(0.42f, 0.27f, 0.12f));
-            RemoveCollider(trunk);
-
-            // Foliage — slightly squashed sphere, random shade of green
-            var top = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            top.name = "Foliage";
-            top.transform.SetParent(root, false);
-            top.transform.localPosition = new Vector3(0f, 2.9f, 0f);
-            top.transform.localScale    = new Vector3(1.1f, 1.35f, 1.1f);
-            float g = Random.Range(0.45f, 0.75f);
-            SetColor(top, new Color(0.1f, g, 0.15f));
-            RemoveCollider(top);
-        }
-
-        private static void SetColor(GameObject go, Color c)
-        {
-            var mr = go.GetComponent<MeshRenderer>();
-            if (mr != null) mr.material.color = c;
-        }
-
-        private static void RemoveCollider(GameObject go)
-        {
-            var col = go.GetComponent<Collider>();
-            if (col != null) Object.Destroy(col);
         }
     }
 }
