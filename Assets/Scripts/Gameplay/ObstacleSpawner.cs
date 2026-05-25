@@ -98,9 +98,11 @@ namespace FlexReality.BodyTracking
 
         private void Spawn(ObstacleDirection dir, float speed)
         {
-            Vector3 fwd = playerTarget.forward;
+            Vector3 fwd   = playerTarget.forward;
             Vector3 right = playerTarget.right;
-            Vector3 origin = playerTarget.position;
+            // Use fixed world-centre X so lanes stay on the road regardless
+            // of which lane the avatar is currently standing in.
+            Vector3 origin = new Vector3(0f, playerTarget.position.y, playerTarget.position.z);
             Vector3 spawnPos, targetPos;
 
             switch (dir)
