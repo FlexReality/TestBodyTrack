@@ -56,6 +56,8 @@ namespace FlexReality.BodyTracking
                 new GameObject("MathQuestionUI").AddComponent<MathQuestionUI>();
             if (FindAnyObjectByType<ScoreLivesUI>() == null)
                 new GameObject("ScoreLivesUI").AddComponent<ScoreLivesUI>();
+            if (FindAnyObjectByType<RestartButtonUI>() == null)
+                new GameObject("RestartButtonUI").AddComponent<RestartButtonUI>();
         }
 
         private void Update()
