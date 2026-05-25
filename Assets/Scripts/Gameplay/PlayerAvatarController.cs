@@ -143,6 +143,10 @@ namespace FlexReality.BodyTracking
             proj.speed       = projectileSpeed;
             proj.maxDistance = projectileMaxDistance;
 
+            // Lightning arc from shooter toward the target direction.
+            Vector3 lightningEnd = origin + avatarRoot.forward * projectileMaxDistance;
+            HitEffects.SpawnLightning(origin, lightningEnd);
+
             Destroy(go, projectileMaxDistance / Mathf.Max(projectileSpeed, 1f) + 0.5f);
         }
 
