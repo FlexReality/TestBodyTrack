@@ -2,16 +2,17 @@ using UnityEngine;
 
 namespace FlexReality.BodyTracking
 {
-    // Spawns cube obstacles around the player from 4 directions, aiming at the
-    // player. Spawn rate and obstacle speed are driven by GameSession so the
-    // difficulty ramps up over time. Pauses when the game is over.
+    // Spawns answer-carrying obstacles for the math game (Front/Left/Right lanes)
+    // and classic jump-dodge cubes for the Bottom lane.
+    // Spawn pattern: correct, wrong, wrong, correct, wrong, wrong, ...
+    // so a correct answer is always reachable within 3 spawns.
     public class ObstacleSpawner : MonoBehaviour
     {
         [Header("Spawning")]
-        [SerializeField] private GameObject obstaclePrefab;     // fallback; cube generated if null
+        [SerializeField] private GameObject obstaclePrefab;
         [SerializeField] private Transform playerTarget;
         [SerializeField] private float spawnDistance = 14f;
-        [Tooltip("Uniform scale applied to instantiated obstacles. Quaternius Food ships microscopic (~0.03 units), so we need ~30–50× to get a fruit-sized item. Bump down if huge, up if tiny.")]
+        [Tooltip("Uniform scale applied to FBX food models (~0.03 units). Unused for math-number cubes.")]
         [SerializeField] private float obstacleScale = 40f;
 
         [Header("Prefab Pools (drag FBXs per lane; empty array falls back to coloured cube)")]
@@ -41,10 +42,28 @@ namespace FlexReality.BodyTracking
         private float timer;
         private GameObject defaultPrefab;
 
+        // Pattern: every 3rd spawn (index 0, 3, 6, ...) is the correct answer.
+        // Starts high so the very first obstacle spawned is always correct.
+        private int _spawnsSinceCorrect = 99;
+
         private void Awake()
         {
             if (obstaclePrefab == null) obstaclePrefab = BuildDefaultObstaclePrefab();
         }
+
+        private void Start()
+        {
+            if (GameSession.Instance != null)
+                GameSession.Instance.OnRestart += OnSessionRestart;
+        }
+
+        private void OnDestroy()
+        {
+            if (GameSession.Instance != null)
+                GameSession.Instance.OnRestart -= OnSessionRestart;
+        }
+
+        private void OnSessionRestart() => _spawnsSinceCorrect = 99;
 
         private void Update()
         {
@@ -83,7 +102,6 @@ namespace FlexReality.BodyTracking
             Vector3 right = playerTarget.right;
             Vector3 origin = playerTarget.position;
             Vector3 spawnPos, targetPos;
-            Vector3 velocity;
 
             switch (dir)
             {
@@ -104,18 +122,16 @@ namespace FlexReality.BodyTracking
                     spawnPos  = targetPos + fwd * spawnDistance;
                     break;
             }
-            velocity = (targetPos - spawnPos).normalized * speed;
+            Vector3 velocity = (targetPos - spawnPos).normalized * speed;
 
             var prefab = PickPrefabForDirection(dir);
-            bool usingFallback = prefab == obstaclePrefab;
+            bool usingFallback = (prefab == obstaclePrefab);
 
             var go = Instantiate(prefab, spawnPos, Quaternion.identity);
             go.name = $"Obstacle_{dir}";
             go.SetActive(true);
             if (!usingFallback) go.transform.localScale = Vector3.one * obstacleScale;
 
-            // Real FBX food models rarely have a collider — add a trigger box so
-            // the player's attack sphere can register hits via OverlapSphere.
             if (go.GetComponent<Collider>() == null)
             {
                 var bc = go.AddComponent<BoxCollider>();
@@ -126,9 +142,31 @@ namespace FlexReality.BodyTracking
             if (oc == null) oc = go.AddComponent<ObstacleController>();
             oc.Launch(dir, velocity, targetPos, playerTarget);
 
-            // Only the fallback cube gets tinted to the lane colour. Real food
-            // already has the right colour from the auto-colour material remap.
-            if (usingFallback) ColorizeByDirection(go, dir);
+            // Math answers on Front/Left/Right lanes only.
+            bool isMathLane = (dir != ObstacleDirection.Bottom);
+            var session = GameSession.Instance;
+            if (isMathLane && session != null)
+            {
+                bool spawnCorrect = (_spawnsSinceCorrect >= 2);
+                if (spawnCorrect) _spawnsSinceCorrect = 0;
+                else _spawnsSinceCorrect++;
+
+                int value;
+                if (spawnCorrect)
+                {
+                    value = session.CurrentQuestion.Answer;
+                }
+                else
+                {
+                    var wrongs = session.CurrentQuestion.WrongAnswers(3);
+                    value = wrongs[Random.Range(0, wrongs.Length)];
+                }
+                oc.SetAsMathAnswer(value, spawnCorrect);
+            }
+            else if (usingFallback)
+            {
+                ColorizeByDirection(go, dir);
+            }
         }
 
         private GameObject PickPrefabForDirection(ObstacleDirection dir)

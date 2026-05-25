@@ -36,6 +36,7 @@ namespace FlexReality.BodyTracking
         private float baselineHipY = -1f;
         private float lastJumpTime = -10f;
         private GestureFlags previousFlags;
+        private bool wasTracking;
 
         private void Awake()
         {
@@ -57,7 +58,20 @@ namespace FlexReality.BodyTracking
         {
             if (provider == null) return;
             var pose = provider.CurrentPose;
-            if (pose == null || !pose.IsTracking) return;
+            if (pose == null || !pose.IsTracking)
+            {
+                wasTracking = false;
+                return;
+            }
+
+            // New person entered the frame — reset calibration so their body
+            // proportions don't inherit the previous player's jump baseline.
+            if (!wasTracking)
+            {
+                baselineHipY = -1f;
+                previousFlags = GestureFlags.None;
+                wasTracking = true;
+            }
 
             var flags = Evaluate(pose);
             CurrentGestures = flags;
