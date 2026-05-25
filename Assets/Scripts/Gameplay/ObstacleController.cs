@@ -64,13 +64,21 @@ namespace FlexReality.BodyTracking
             labelObj.transform.SetParent(transform, false);
             labelObj.transform.localPosition = Vector3.zero;
 
+            // Neutralize the parent's world scale so the label is always
+            // the same physical size regardless of whether this is a fallback
+            // cube (scale 1) or a scaled FBX food model (scale ~40).
+            float parentWorldScale = Mathf.Max(transform.lossyScale.x, 0.001f);
+            labelObj.transform.localScale = Vector3.one / parentWorldScale;
+
             var tmp = labelObj.AddComponent<TextMeshPro>();
             tmp.text = value.ToString();
-            tmp.fontSize = 4f;
+            // TMP 3D: fontSize ≈ worldUnits * 10 at neutralized scale.
+            // fontSize 8 → ~0.8 world units tall — large and readable from 14 units away.
+            tmp.fontSize = 8f;
             tmp.fontStyle = FontStyles.Bold;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.color = Color.white;
-            tmp.rectTransform.sizeDelta = new Vector2(1.2f, 1.2f);
+            tmp.rectTransform.sizeDelta = new Vector2(2f, 2f);
         }
 
         private void Update()
