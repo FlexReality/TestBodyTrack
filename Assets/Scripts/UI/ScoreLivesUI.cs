@@ -19,7 +19,10 @@ namespace FlexReality.BodyTracking
         {
             var canvas = GetOrCreateCanvas();
             if (scoreLabel == null) scoreLabel = CreateLabel(canvas, "ScoreLabel", TopLeft);
+            else TopLeft(scoreLabel.rectTransform);
+
             if (livesLabel == null) livesLabel = CreateLabel(canvas, "LivesLabel", TopRight);
+            else TopRight(livesLabel.rectTransform);
         }
 
         private void OnEnable()

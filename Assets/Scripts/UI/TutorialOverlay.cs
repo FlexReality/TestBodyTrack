@@ -23,7 +23,14 @@ namespace FlexReality.BodyTracking
         private void Awake()
         {
             if (panel == null) panel = (RectTransform)transform;
-            if (skip) { hasShown = true; Time.timeScale = 1f; if (panel != null) panel.gameObject.SetActive(false); return; }
+            if (skip)
+            {
+                hasShown = true;
+                Time.timeScale = 1f;
+                // Hide the whole GameObject — catches cases where panel is unassigned.
+                gameObject.SetActive(false);
+                return;
+            }
             if (!hasShown) Show();
         }
 
