@@ -60,6 +60,10 @@ namespace FlexReality.BodyTracking
             spinAxis = Vector3.up;
             spinSpeed = 50f;
 
+            // Hide the food/cube mesh — only the number label should be visible.
+            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+                mr.enabled = false;
+
             var labelObj = new GameObject("AnswerLabel");
             labelObj.transform.SetParent(transform, false);
             labelObj.transform.localPosition = Vector3.zero;
