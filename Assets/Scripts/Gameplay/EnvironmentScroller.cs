@@ -7,6 +7,7 @@ namespace FlexReality.BodyTracking
     public class EnvironmentScroller : MonoBehaviour
     {
         [SerializeField] private float scrollSpeed   = 7f;
+        public float ScrollSpeed => scrollSpeed;
         [SerializeField] private float recycleZ      = 12f;   // how far behind player before recycling
         [SerializeField] private float respawnZ      = 60f;   // how far ahead to re-place recycled objects
 

@@ -54,7 +54,13 @@ namespace FlexReality.BodyTracking
 
         private void LateUpdate()
         {
-            // Measure velocity from root movement.
+            // Sync leg speed to the environment scroll speed so it looks like
+            // the avatar is actually running at that pace.
+            var scroller = FindAnyObjectByType<EnvironmentScroller>();
+            float runSpeed = scroller != null ? scroller.ScrollSpeed : 7f;
+            // Map scroll speed (0-15) to leg frequency (1-8 steps/sec).
+            frequency = Mathf.Lerp(1f, 8f, Mathf.InverseLerp(0f, 15f, runSpeed));
+
             float velocity = (transform.position - lastPos).magnitude / Time.deltaTime;
             lastPos = transform.position;
 
