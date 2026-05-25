@@ -64,6 +64,8 @@ namespace FlexReality.BodyTracking
                 new GameObject("ScoreLivesUI").AddComponent<ScoreLivesUI>();
             if (FindAnyObjectByType<RestartButtonUI>() == null)
                 new GameObject("RestartButtonUI").AddComponent<RestartButtonUI>();
+            if (FindAnyObjectByType<EnvironmentScroller>() == null)
+                new GameObject("EnvironmentScroller").AddComponent<EnvironmentScroller>();
         }
 
         private void Update()

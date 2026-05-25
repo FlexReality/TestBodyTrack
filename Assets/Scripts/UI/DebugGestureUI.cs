@@ -20,9 +20,8 @@ namespace FlexReality.BodyTracking
         private void Awake()
         {
             if (!hideInGame) return;
-            if (tmpLabel != null) tmpLabel.gameObject.SetActive(false);
-            if (legacyLabel != null) legacyLabel.gameObject.SetActive(false);
-            enabled = false;
+            // Hide the whole GameObject so no label text leaks through.
+            gameObject.SetActive(false);
         }
 
         private void OnEnable()

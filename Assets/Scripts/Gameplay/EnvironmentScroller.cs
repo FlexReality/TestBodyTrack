@@ -2,52 +2,40 @@ using UnityEngine;
 
 namespace FlexReality.BodyTracking
 {
-    // Scrolls existing scene trees toward the player to create an endless-runner
-    // illusion. Assign the parent GameObject that holds all the forest trees to
-    // ForestParent — the scroller pools and recycles its children automatically.
+    // Scrolls the "WorldDecorations" forest toward the player for an
+    // endless-runner illusion. Auto-finds the root by name — no manual wiring.
     public class EnvironmentScroller : MonoBehaviour
     {
-        [Header("Source")]
-        [Tooltip("Parent whose children are the trees/props to scroll. Drag your forest root here.")]
-        [SerializeField] private Transform forestParent;
-
-        [Header("Scroll")]
-        [SerializeField] private float scrollSpeed = 7f;
-
-        [Header("Recycle")]
-        [Tooltip("Z distance behind the player at which an object is teleported to the front.")]
-        [SerializeField] private float recycleZ = 12f;
-        [Tooltip("Z distance in front of the player where recycled objects reappear.")]
-        [SerializeField] private float respawnZ = 55f;
+        [SerializeField] private float scrollSpeed   = 7f;
+        [SerializeField] private float recycleZ      = 12f;   // how far behind player before recycling
+        [SerializeField] private float respawnZ      = 60f;   // how far ahead to re-place recycled objects
 
         private Transform[] _pool;
-        private float[]     _poolOrigX; // keep original X so recycled trees stay on their side
+        private float[]     _origX;   // preserve each object's original X (left/right side)
 
         private void Start()
         {
-            if (forestParent == null)
+            var root = GameObject.Find("WorldDecorations");
+            if (root == null)
             {
-                Debug.LogWarning("[EnvironmentScroller] ForestParent not assigned. " +
-                                 "Drag the forest root GameObject into the ForestParent field.", this);
+                Debug.LogWarning("[EnvironmentScroller] 'WorldDecorations' not found — run Tools ▸ Body Tracking ▸ Generate Decorated World first.");
                 enabled = false;
                 return;
             }
 
-            int count = forestParent.childCount;
-            _pool      = new Transform[count];
-            _poolOrigX = new float[count];
-
-            for (int i = 0; i < count; i++)
+            int n  = root.transform.childCount;
+            _pool  = new Transform[n];
+            _origX = new float[n];
+            for (int i = 0; i < n; i++)
             {
-                _pool[i]      = forestParent.GetChild(i);
-                _poolOrigX[i] = _pool[i].position.x;
+                _pool[i]  = root.transform.GetChild(i);
+                _origX[i] = _pool[i].position.x;
             }
         }
 
         private void Update()
         {
             float delta = scrollSpeed * Time.deltaTime;
-
             for (int i = 0; i < _pool.Length; i++)
             {
                 var t = _pool[i];
@@ -56,9 +44,9 @@ namespace FlexReality.BodyTracking
                 if (t.position.z < -recycleZ)
                 {
                     t.position = new Vector3(
-                        _poolOrigX[i],                          // keep original side (left/right)
+                        _origX[i],
                         t.position.y,
-                        respawnZ + Random.Range(0f, 10f));      // small random spread so trees don't clump
+                        respawnZ + Random.Range(0f, 12f));
                 }
             }
         }
