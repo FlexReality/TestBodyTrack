@@ -123,8 +123,9 @@ namespace FlexReality.BodyTracking.EditorTools
             int rockProps    = ScatterBetween(root.transform, Rocks,      30, scaleMin: 10f, scaleMax: 20f);
             int animalProps  = ScatterAnimals(root.transform, 6);
 
-            // 5. Road with perspective lines.
+            // 5. Road with perspective lines + scrolling dashes.
             BuildRoad();
+            BuildScrollingDashes(root.transform);
 
             // 4. Sky/sun palette.
             TintCameraAndSun();
@@ -356,13 +357,8 @@ namespace FlexReality.BodyTracking.EditorTools
         }
 
         // -------- 5. Road surface + converging lane lines --------
-        // A dark asphalt strip in the center with white edge lines and a dashed
-        // center divider. Because the scene uses a perspective camera, parallel
-        // lines running along Z naturally converge to a vanishing point —
-        // no tricks needed.
         private static void BuildRoad()
         {
-            // Remove old road if we're re-running the tool.
             var oldRoad = GameObject.Find("Road");
             if (oldRoad != null) Object.DestroyImmediate(oldRoad);
 
@@ -372,31 +368,18 @@ namespace FlexReality.BodyTracking.EditorTools
             var urpLit = Shader.Find("Universal Render Pipeline/Lit");
             if (urpLit == null) urpLit = Shader.Find("Standard");
 
-            // -- Asphalt surface (center, 7 units wide, 90 deep) --
+            // Asphalt surface — 4.5 units wide, 90 deep.
             var asphalt = GameObject.CreatePrimitive(PrimitiveType.Plane);
             asphalt.name = "Asphalt";
             asphalt.transform.SetParent(roadRoot.transform);
             asphalt.transform.position   = new Vector3(0f, 0.01f, 35f);
-            asphalt.transform.localScale = new Vector3(0.7f, 1f, 9f);   // 7 wide × 90 long
-            ApplyColor(asphalt, new Color(0.18f, 0.18f, 0.18f), urpLit); // dark asphalt
+            asphalt.transform.localScale = new Vector3(0.45f, 1f, 9f);
+            ApplyColor(asphalt, new Color(0.18f, 0.18f, 0.18f), urpLit);
             Object.DestroyImmediate(asphalt.GetComponent<Collider>());
 
-            // -- White edge lines (left & right) --
-            CreateRoadLine(roadRoot.transform, -3.4f, urpLit, "EdgeLine_L");
-            CreateRoadLine(roadRoot.transform,  3.4f, urpLit, "EdgeLine_R");
-
-            // -- Dashed center line --
-            float dashLen = 2.5f, gapLen = 2.5f;
-            for (float z = 0f; z < 80f; z += dashLen + gapLen)
-            {
-                var dash = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                dash.name = "CenterDash";
-                dash.transform.SetParent(roadRoot.transform);
-                dash.transform.position   = new Vector3(0f, 0.03f, z + dashLen * 0.5f);
-                dash.transform.localScale = new Vector3(0.12f, 0.02f, dashLen);
-                ApplyColor(dash, Color.white, urpLit);
-                Object.DestroyImmediate(dash.GetComponent<Collider>());
-            }
+            // White edge lines.
+            CreateRoadLine(roadRoot.transform, -2.2f, urpLit, "EdgeLine_L");
+            CreateRoadLine(roadRoot.transform,  2.2f, urpLit, "EdgeLine_R");
         }
 
         private static void CreateRoadLine(Transform parent, float x, Shader shader, string goName)
@@ -405,9 +388,29 @@ namespace FlexReality.BodyTracking.EditorTools
             line.name = goName;
             line.transform.SetParent(parent);
             line.transform.position   = new Vector3(x, 0.03f, 40f);
-            line.transform.localScale = new Vector3(0.15f, 0.02f, 90f);
+            line.transform.localScale = new Vector3(0.12f, 0.02f, 90f);
             ApplyColor(line, Color.white, shader);
             Object.DestroyImmediate(line.GetComponent<Collider>());
+        }
+
+        // Scrolling center dashes — placed in WorldDecorations so EnvironmentScroller
+        // moves them toward the player, creating the endless-runner road flash.
+        private static void BuildScrollingDashes(Transform decoParent)
+        {
+            var urpLit = Shader.Find("Universal Render Pipeline/Lit");
+            if (urpLit == null) urpLit = Shader.Find("Standard");
+
+            float dashLen = 2.5f, step = 5f;
+            for (float z = 0f; z < 75f; z += step)
+            {
+                var dash = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                dash.name = "RoadDash";
+                dash.transform.SetParent(decoParent);
+                dash.transform.position   = new Vector3(0f, 0.04f, z + dashLen * 0.5f);
+                dash.transform.localScale = new Vector3(0.12f, 0.02f, dashLen);
+                ApplyColor(dash, Color.white, urpLit);
+                Object.DestroyImmediate(dash.GetComponent<Collider>());
+            }
         }
 
         private static void ApplyColor(GameObject go, Color color, Shader shader)
