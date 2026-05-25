@@ -82,14 +82,16 @@ namespace FlexReality.BodyTracking
             labelObj.transform.localScale = Vector3.one / parentWorldScale;
 
             var tmp = labelObj.AddComponent<TextMeshPro>();
-            tmp.text         = value.ToString();
-            tmp.fontSize     = 11f;
-            tmp.fontStyle    = FontStyles.Bold;
-            tmp.alignment    = TextAlignmentOptions.Center;
-            tmp.color        = BallColors[Random.Range(0, BallColors.Length)];
-            tmp.outlineColor = new Color32(255, 255, 255, 255);
-            tmp.outlineWidth = 0.25f;
+            tmp.text      = value.ToString();
+            tmp.fontSize  = 11f;
+            tmp.fontStyle = FontStyles.Bold;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.color     = BallColors[Random.Range(0, BallColors.Length)];
             tmp.rectTransform.sizeDelta = new Vector2(3f, 3f);
+
+            // Outline must be set on the material instance directly.
+            tmp.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, 0.3f);
+            tmp.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, Color.white);
         }
 
         private void Update()
