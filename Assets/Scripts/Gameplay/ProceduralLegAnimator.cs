@@ -11,13 +11,15 @@ namespace FlexReality.BodyTracking
         [Header("Swing")]
         [Tooltip("Max swing angle in degrees forward/back.")]
         [SerializeField] private float amplitude = 35f;
-        [Tooltip("Steps per second at full speed.")]
-        [SerializeField] private float frequency = 6f;
-        [Tooltip("How quickly the legs blend in/out when starting or stopping.")]
+        [Tooltip("Steps per second.")]
+        [SerializeField] private float frequency = 3f;
+        [Tooltip("How quickly the legs blend in/out.")]
         [SerializeField] private float blendSpeed = 6f;
 
-        [Header("Velocity detection")]
-        [Tooltip("World-units/sec above which legs start swinging.")]
+        [Header("Run mode")]
+        [Tooltip("Always animate legs regardless of movement.")]
+        [SerializeField] private bool alwaysRun = true;
+        [Tooltip("Used only when alwaysRun is off.")]
         [SerializeField] private float moveThreshold = 0.15f;
 
         private Animator anim;
@@ -56,7 +58,7 @@ namespace FlexReality.BodyTracking
             float velocity = (transform.position - lastPos).magnitude / Time.deltaTime;
             lastPos = transform.position;
 
-            bool moving = velocity > moveThreshold;
+            bool moving = alwaysRun || velocity > moveThreshold;
             float targetWeight = moving ? 1f : 0f;
             blendWeight = Mathf.MoveTowards(blendWeight, targetWeight, Time.deltaTime * blendSpeed);
 
