@@ -15,9 +15,6 @@ namespace FlexReality.BodyTracking
         [SerializeField] private float laneOffset = 1.8f;
         [SerializeField] private float laneLerpSpeed = 8f;
 
-        [Header("Jump (visual only)")]
-        [SerializeField] private float jumpHeight = 1.6f;
-        [SerializeField] private float jumpDuration = 0.55f;
 
         [Header("Projectile")]
         [SerializeField] private float projectileSpeed = 20f;
@@ -29,7 +26,6 @@ namespace FlexReality.BodyTracking
         [SerializeField] private float shootCooldown = 1.2f;
 
         private int currentLane;   // -1 left | 0 centre | 1 right
-        private float jumpTimer;
         private float lastShotTime = -99f;
         private Vector3 basePos;
 
@@ -53,10 +49,6 @@ namespace FlexReality.BodyTracking
         {
             switch (gesture)
             {
-                case GestureType.Jump:
-                    Jump();
-                    break;
-                // Hand gestures shoot from whatever lane the body is currently in.
                 case GestureType.LeftHandUp:
                 case GestureType.RightHandUp:
                 case GestureType.HandsForward:
@@ -67,11 +59,6 @@ namespace FlexReality.BodyTracking
                     }
                     break;
             }
-        }
-
-        private void Jump()
-        {
-            if (jumpTimer <= 0f) jumpTimer = jumpDuration;
         }
 
         private void Update()
@@ -85,20 +72,8 @@ namespace FlexReality.BodyTracking
                 else                                             currentLane =  0;
             }
 
-            // Lane lerp
             Vector3 target = basePos;
             target.x = currentLane * laneOffset;
-
-            // Jump arc
-            float jumpY = 0f;
-            if (jumpTimer > 0f)
-            {
-                jumpTimer -= Time.deltaTime;
-                float t = 1f - Mathf.Clamp01(jumpTimer / jumpDuration);
-                jumpY = Mathf.Sin(t * Mathf.PI) * jumpHeight;
-            }
-            target.y = basePos.y + jumpY;
-
             avatarRoot.localPosition = Vector3.Lerp(avatarRoot.localPosition, target,
                 Time.deltaTime * laneLerpSpeed);
         }
