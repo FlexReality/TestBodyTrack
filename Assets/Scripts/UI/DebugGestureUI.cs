@@ -12,8 +12,18 @@ namespace FlexReality.BodyTracking
         [SerializeField] private BodyGestureDetector detector;
         [SerializeField] private TMP_Text tmpLabel;
         [SerializeField] private Text legacyLabel;
+        [Tooltip("Hides this debug overlay during normal gameplay. Uncheck to debug gestures.")]
+        [SerializeField] private bool hideInGame = true;
 
         private readonly StringBuilder builder = new StringBuilder(64);
+
+        private void Awake()
+        {
+            if (!hideInGame) return;
+            if (tmpLabel != null) tmpLabel.gameObject.SetActive(false);
+            if (legacyLabel != null) legacyLabel.gameObject.SetActive(false);
+            enabled = false;
+        }
 
         private void OnEnable()
         {

@@ -15,11 +15,15 @@ namespace FlexReality.BodyTracking
         [SerializeField] private RectTransform panel;
         [SerializeField] private Button startButton;
 
+        [Tooltip("Uncheck to show the tutorial panel on launch. Leave checked to skip it.")]
+        [SerializeField] private bool skip = true;
+
         private bool hasShown;
 
         private void Awake()
         {
             if (panel == null) panel = (RectTransform)transform;
+            if (skip) { hasShown = true; Time.timeScale = 1f; if (panel != null) panel.gameObject.SetActive(false); return; }
             if (!hasShown) Show();
         }
 

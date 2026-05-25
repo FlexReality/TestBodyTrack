@@ -50,6 +50,13 @@ namespace FlexReality.BodyTracking
             Restart();
         }
 
+        private void Start()
+        {
+            // Auto-create MathQuestionUI if nobody added it to the scene.
+            if (FindAnyObjectByType<MathQuestionUI>() == null)
+                new GameObject("MathQuestionUI").AddComponent<MathQuestionUI>();
+        }
+
         private void Update()
         {
             if (!IsAlive) return;
