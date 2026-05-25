@@ -123,6 +123,9 @@ namespace FlexReality.BodyTracking.EditorTools
             int rockProps    = ScatterBetween(root.transform, Rocks,      30, scaleMin: 10f, scaleMax: 20f);
             int animalProps  = ScatterAnimals(root.transform, 6);
 
+            // 5. Road with perspective lines.
+            BuildRoad();
+
             // 4. Sky/sun palette.
             TintCameraAndSun();
 
@@ -270,31 +273,25 @@ namespace FlexReality.BodyTracking.EditorTools
         }
 
         // -------- 3a. Trees in two lines along the runway --------
-        // The runway is the gameplay corridor running roughly z = 0..15 in front
-        // of the player. We plant trees just outside the corridor on each side
-        // so the camera always sees a forested edge, and a few in the back to
-        // give the world depth.
         private static int PlantTreeBorders(Transform parent)
         {
             var loaded = LoadAll(Trees);
             if (loaded.Count == 0) return 0;
 
             int placed = 0;
-            // Side borders — two staggered rows on each side. Trees ship
-            // microscopic in Quaternius Nature; multipliers in the 100-200 range
-            // make them tower over the (very-large) Quaternius animals.
+            // Inner row starts at x=±9 — far enough from the center lanes (±1.8).
             for (float z = -6f; z <= 35f; z += Random.Range(3f, 4.5f))
             {
-                placed += PlantOne(parent, loaded, new Vector3(-7f - Random.value * 1.6f, 0f, z + Random.Range(-0.6f, 0.6f)), 100f, 150f);
-                placed += PlantOne(parent, loaded, new Vector3( 7f + Random.value * 1.6f, 0f, z + Random.Range(-0.6f, 0.6f)), 100f, 150f);
+                placed += PlantOne(parent, loaded, new Vector3(-9f - Random.value * 1.6f, 0f, z + Random.Range(-0.6f, 0.6f)), 100f, 150f);
+                placed += PlantOne(parent, loaded, new Vector3( 9f + Random.value * 1.6f, 0f, z + Random.Range(-0.6f, 0.6f)), 100f, 150f);
             }
-            // Outer second row farther out — gives parallax depth.
+            // Outer second row — gives parallax depth.
             for (float z = -8f; z <= 38f; z += Random.Range(4f, 6f))
             {
-                placed += PlantOne(parent, loaded, new Vector3(-14f - Random.value * 5f, 0f, z), 130f, 180f);
-                placed += PlantOne(parent, loaded, new Vector3( 14f + Random.value * 5f, 0f, z), 130f, 180f);
+                placed += PlantOne(parent, loaded, new Vector3(-16f - Random.value * 5f, 0f, z), 130f, 180f);
+                placed += PlantOne(parent, loaded, new Vector3( 16f + Random.value * 5f, 0f, z), 130f, 180f);
             }
-            // A cluster way at the back as a horizon line.
+            // Horizon cluster.
             for (int i = 0; i < 12; i++)
                 placed += PlantOne(parent, loaded,
                     new Vector3(Random.Range(-22f, 22f), 0f, Random.Range(40f, 60f)),
@@ -332,10 +329,10 @@ namespace FlexReality.BodyTracking.EditorTools
             while (placed < count && attempts < count * 6)
             {
                 attempts++;
-                // Stay OUT of the runway (|x| > 2.6) but within the grass.
+                // Keep props outside x=±5 so the road + avatar area stays clear.
                 float x = (Random.value < 0.5f
-                    ? Random.Range(-15f, -3.0f)
-                    : Random.Range( 3.0f, 15f));
+                    ? Random.Range(-16f, -5.0f)
+                    : Random.Range(  5.0f, 16f));
                 float z = Random.Range(-6f, 35f);
                 placed += PlantOne(parent, loaded, new Vector3(x, 0f, z), scaleMin, scaleMax);
             }
@@ -356,6 +353,70 @@ namespace FlexReality.BodyTracking.EditorTools
                 placed += PlantOne(parent, loaded, new Vector3(x, 0f, z), 0.3f, 0.5f, uprightFix: false);
             }
             return placed;
+        }
+
+        // -------- 5. Road surface + converging lane lines --------
+        // A dark asphalt strip in the center with white edge lines and a dashed
+        // center divider. Because the scene uses a perspective camera, parallel
+        // lines running along Z naturally converge to a vanishing point —
+        // no tricks needed.
+        private static void BuildRoad()
+        {
+            // Remove old road if we're re-running the tool.
+            var oldRoad = GameObject.Find("Road");
+            if (oldRoad != null) Object.DestroyImmediate(oldRoad);
+
+            var roadRoot = new GameObject("Road");
+            Undo.RegisterCreatedObjectUndo(roadRoot, "World: build road");
+
+            var urpLit = Shader.Find("Universal Render Pipeline/Lit");
+            if (urpLit == null) urpLit = Shader.Find("Standard");
+
+            // -- Asphalt surface (center, 7 units wide, 90 deep) --
+            var asphalt = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            asphalt.name = "Asphalt";
+            asphalt.transform.SetParent(roadRoot.transform);
+            asphalt.transform.position   = new Vector3(0f, 0.01f, 35f);
+            asphalt.transform.localScale = new Vector3(0.7f, 1f, 9f);   // 7 wide × 90 long
+            ApplyColor(asphalt, new Color(0.18f, 0.18f, 0.18f), urpLit); // dark asphalt
+            Object.DestroyImmediate(asphalt.GetComponent<Collider>());
+
+            // -- White edge lines (left & right) --
+            CreateRoadLine(roadRoot.transform, -3.4f, urpLit, "EdgeLine_L");
+            CreateRoadLine(roadRoot.transform,  3.4f, urpLit, "EdgeLine_R");
+
+            // -- Dashed center line --
+            float dashLen = 2.5f, gapLen = 2.5f;
+            for (float z = 0f; z < 80f; z += dashLen + gapLen)
+            {
+                var dash = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                dash.name = "CenterDash";
+                dash.transform.SetParent(roadRoot.transform);
+                dash.transform.position   = new Vector3(0f, 0.03f, z + dashLen * 0.5f);
+                dash.transform.localScale = new Vector3(0.12f, 0.02f, dashLen);
+                ApplyColor(dash, Color.white, urpLit);
+                Object.DestroyImmediate(dash.GetComponent<Collider>());
+            }
+        }
+
+        private static void CreateRoadLine(Transform parent, float x, Shader shader, string goName)
+        {
+            var line = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            line.name = goName;
+            line.transform.SetParent(parent);
+            line.transform.position   = new Vector3(x, 0.03f, 40f);
+            line.transform.localScale = new Vector3(0.15f, 0.02f, 90f);
+            ApplyColor(line, Color.white, shader);
+            Object.DestroyImmediate(line.GetComponent<Collider>());
+        }
+
+        private static void ApplyColor(GameObject go, Color color, Shader shader)
+        {
+            var mr = go.GetComponent<MeshRenderer>();
+            if (mr == null) return;
+            var mat = new Material(shader != null ? shader : Shader.Find("Standard")) { color = color };
+            mat.SetFloat("_Smoothness", 0.05f);
+            mr.sharedMaterial = mat;
         }
 
         // -------- 4. Lighting + sky --------
