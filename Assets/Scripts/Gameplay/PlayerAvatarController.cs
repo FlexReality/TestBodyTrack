@@ -25,9 +25,12 @@ namespace FlexReality.BodyTracking
         [SerializeField] private float projectileVisualRadius = 0.5f;
         [Tooltip("Height of the projectile spawn point (chest level).")]
         [SerializeField] private float chestHeight = 1.2f;
+        [Tooltip("Seconds before the next shot is allowed.")]
+        [SerializeField] private float shootCooldown = 1.2f;
 
         private int currentLane;   // -1 left | 0 centre | 1 right
         private float jumpTimer;
+        private float lastShotTime = -99f;
         private Vector3 basePos;
 
         private void Awake()
@@ -57,7 +60,11 @@ namespace FlexReality.BodyTracking
                 case GestureType.LeftHandUp:
                 case GestureType.RightHandUp:
                 case GestureType.HandsForward:
-                    LaunchProjectile(avatarRoot.position + Vector3.up * chestHeight);
+                    if (Time.time - lastShotTime >= shootCooldown)
+                    {
+                        lastShotTime = Time.time;
+                        LaunchProjectile(avatarRoot.position + Vector3.up * chestHeight);
+                    }
                     break;
             }
         }
