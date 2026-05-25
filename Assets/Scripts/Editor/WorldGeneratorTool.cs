@@ -280,23 +280,26 @@ namespace FlexReality.BodyTracking.EditorTools
             if (loaded.Count == 0) return 0;
 
             int placed = 0;
-            // Inner row starts at x=±9 — far enough from the center lanes (±1.8).
+            // Inner row — start at x=±9, clear of the road (±2.25) and lane pads.
             for (float z = -6f; z <= 35f; z += Random.Range(3f, 4.5f))
             {
                 placed += PlantOne(parent, loaded, new Vector3(-9f - Random.value * 1.6f, 0f, z + Random.Range(-0.6f, 0.6f)), 100f, 150f);
                 placed += PlantOne(parent, loaded, new Vector3( 9f + Random.value * 1.6f, 0f, z + Random.Range(-0.6f, 0.6f)), 100f, 150f);
             }
-            // Outer second row — gives parallax depth.
+            // Outer second row — parallax depth.
             for (float z = -8f; z <= 38f; z += Random.Range(4f, 6f))
             {
                 placed += PlantOne(parent, loaded, new Vector3(-16f - Random.value * 5f, 0f, z), 130f, 180f);
                 placed += PlantOne(parent, loaded, new Vector3( 16f + Random.value * 5f, 0f, z), 130f, 180f);
             }
-            // Horizon cluster.
+            // Horizon cluster — also keep |x| > 8 so recycled trees never land on road.
             for (int i = 0; i < 12; i++)
+            {
+                float hx = Random.value < 0.5f ? Random.Range(-22f, -8f) : Random.Range(8f, 22f);
                 placed += PlantOne(parent, loaded,
-                    new Vector3(Random.Range(-22f, 22f), 0f, Random.Range(40f, 60f)),
+                    new Vector3(hx, 0f, Random.Range(40f, 60f)),
                     150f, 220f);
+            }
 
             return placed;
         }
