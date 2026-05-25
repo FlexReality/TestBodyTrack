@@ -135,13 +135,12 @@ namespace FlexReality.BodyTracking
                 {
                     GameSession.Instance.RegisterCorrectHit();
                     SpawnShards(new Color(0.3f, 1f, 0.4f));
-                    Destroy(gameObject, 0.55f);
-                    enabled = false;
+                    Destroy(gameObject);
                 }
                 else
                 {
                     GameSession.Instance?.RegisterWrongHit();
-                    FlashAndDestroy(new Color(0.9f, 0.2f, 0.2f), 0.2f);
+                    Destroy(gameObject);
                 }
                 return;
             }
