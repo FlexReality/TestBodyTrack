@@ -69,46 +69,25 @@ namespace FlexReality.BodyTracking
             answerValue = value;
             isMathObstacle = true;
 
-            // Slow Y-axis spin so the number stays readable.
-            spinAxis = Vector3.up;
-            spinSpeed = 60f;
-
-            // Replace the default cube with a sphere and apply a random bright colour.
+            // No mesh — just the number floating in the air.
+            spinAxis  = Vector3.up;
+            spinSpeed = 55f;
             foreach (var mr in GetComponentsInChildren<MeshRenderer>())
                 mr.enabled = false;
 
-            var ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            ball.name = "NumberBall";
-            ball.transform.SetParent(transform, false);
-            ball.transform.localPosition = Vector3.zero;
-            ball.transform.localScale    = Vector3.one * 0.85f;
-            Destroy(ball.GetComponent<Collider>());
-
-            var ballColor = BallColors[Random.Range(0, BallColors.Length)];
-            var mr2 = ball.GetComponent<MeshRenderer>();
-            if (mr2 != null)
-            {
-                var mat = new Material(Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard"));
-                mat.color = ballColor;
-                mat.SetFloat("_Smoothness", 0.6f);
-                mr2.sharedMaterial = mat;
-            }
-
-            // Number label — white bold text, scale-compensated so it's always
-            // the same physical size regardless of parent scale.
             var labelObj = new GameObject("AnswerLabel");
             labelObj.transform.SetParent(transform, false);
-            labelObj.transform.localPosition = new Vector3(0f, 0f, -0.44f); // face toward camera
+            labelObj.transform.localPosition = Vector3.zero;
             float parentWorldScale = Mathf.Max(transform.lossyScale.x, 0.001f);
             labelObj.transform.localScale = Vector3.one / parentWorldScale;
 
             var tmp = labelObj.AddComponent<TextMeshPro>();
             tmp.text      = value.ToString();
-            tmp.fontSize  = 9f;
+            tmp.fontSize  = 11f;
             tmp.fontStyle = FontStyles.Bold;
             tmp.alignment = TextAlignmentOptions.Center;
-            tmp.color     = Color.white;
-            tmp.rectTransform.sizeDelta = new Vector2(2f, 2f);
+            tmp.color     = BallColors[Random.Range(0, BallColors.Length)];
+            tmp.rectTransform.sizeDelta = new Vector2(3f, 3f);
         }
 
         private void Update()
