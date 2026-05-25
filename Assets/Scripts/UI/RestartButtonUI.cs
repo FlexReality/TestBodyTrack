@@ -4,70 +4,83 @@ using UnityEngine.UI;
 
 namespace FlexReality.BodyTracking
 {
-    // Persistent restart button on the right edge — always visible, not just on game over.
-    // Auto-creates itself if not wired in the Inspector.
+    // Two persistent buttons on the right edge:
+    //   [↺ Recalibrate]  — resets body tracking baseline
+    //   [↺ Restart]      — restarts the game session
     public class RestartButtonUI : MonoBehaviour
     {
         [SerializeField] private Button restartButton;
+        [SerializeField] private Button calibrateButton;
         [SerializeField] private GameSession session;
+        [SerializeField] private BodyGestureDetector gestureDetector;
 
         private void Awake()
         {
+            var canvas = GetOrCreateCanvas();
             if (restartButton == null)
-                restartButton = CreateButton();
+                restartButton = CreateButton(canvas, "RestartButton", "↺  Restart",
+                    new Color(0.12f, 0.12f, 0.12f, 0.78f), 0f);
+            if (calibrateButton == null)
+                calibrateButton = CreateButton(canvas, "CalibrateButton", "⊕  Recalibrate",
+                    new Color(0.08f, 0.18f, 0.28f, 0.78f), 60f);
         }
 
         private void OnEnable()
         {
             if (session == null) session = FindAnyObjectByType<GameSession>();
-            if (restartButton != null)
-                restartButton.onClick.AddListener(OnClick);
+            if (gestureDetector == null) gestureDetector = FindAnyObjectByType<BodyGestureDetector>();
+
+            if (restartButton != null)  restartButton.onClick.AddListener(OnRestart);
+            if (calibrateButton != null) calibrateButton.onClick.AddListener(OnCalibrate);
         }
 
         private void OnDisable()
         {
-            if (restartButton != null)
-                restartButton.onClick.RemoveListener(OnClick);
+            if (restartButton != null)  restartButton.onClick.RemoveListener(OnRestart);
+            if (calibrateButton != null) calibrateButton.onClick.RemoveListener(OnCalibrate);
         }
 
-        private void OnClick() => session?.Restart();
+        private void OnRestart()   => session?.Restart();
+        private void OnCalibrate() => gestureDetector?.Recalibrate();
 
-        private Button CreateButton()
+        // ── Helpers ────────────────────────────────────────────────────────
+
+        private static Canvas GetOrCreateCanvas()
         {
-            Canvas canvas = null;
             foreach (var c in FindObjectsByType<Canvas>(FindObjectsSortMode.None))
-                if (c.renderMode == RenderMode.ScreenSpaceOverlay) { canvas = c; break; }
+                if (c.renderMode == RenderMode.ScreenSpaceOverlay) return c;
 
-            if (canvas == null)
-            {
-                var cgo = new GameObject("HUDCanvas");
-                canvas = cgo.AddComponent<Canvas>();
-                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                cgo.AddComponent<CanvasScaler>();
-                cgo.AddComponent<GraphicRaycaster>();
-            }
+            var cgo = new GameObject("HUDCanvas");
+            var canvas = cgo.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            cgo.AddComponent<CanvasScaler>();
+            cgo.AddComponent<GraphicRaycaster>();
+            return canvas;
+        }
 
-            // Button root
-            var btnGo = new GameObject("RestartButton");
+        // offsetY: positive = higher on screen. Restart at 0, Calibrate at +60.
+        private static Button CreateButton(Canvas canvas, string name, string label,
+            Color bgColor, float offsetY)
+        {
+            var btnGo = new GameObject(name);
             btnGo.transform.SetParent(canvas.transform, false);
 
             var rt = btnGo.AddComponent<RectTransform>();
             rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(1f, 0.5f);
-            rt.anchoredPosition = new Vector2(-20f, 0f);
-            rt.sizeDelta = new Vector2(110f, 50f);
+            rt.anchoredPosition = new Vector2(-20f, offsetY);
+            rt.sizeDelta = new Vector2(160f, 50f);
 
             var img = btnGo.AddComponent<Image>();
-            img.color = new Color(0.15f, 0.15f, 0.15f, 0.75f);
+            img.color = bgColor;
 
             var btn = btnGo.AddComponent<Button>();
             var colors = btn.colors;
-            colors.normalColor      = new Color(0.15f, 0.15f, 0.15f, 0.75f);
-            colors.highlightedColor = new Color(0.3f, 0.3f, 0.3f, 0.9f);
-            colors.pressedColor     = new Color(0.05f, 0.05f, 0.05f, 1f);
+            colors.normalColor      = bgColor;
+            colors.highlightedColor = bgColor + new Color(0.15f, 0.15f, 0.15f, 0f);
+            colors.pressedColor     = bgColor - new Color(0.1f, 0.1f, 0.1f, 0f);
             btn.colors = colors;
             btn.targetGraphic = img;
 
-            // Label
             var labelGo = new GameObject("Label");
             labelGo.transform.SetParent(btnGo.transform, false);
             var labelRt = labelGo.AddComponent<RectTransform>();
@@ -76,8 +89,8 @@ namespace FlexReality.BodyTracking
             labelRt.offsetMin = labelRt.offsetMax = Vector2.zero;
 
             var tmp = labelGo.AddComponent<TextMeshProUGUI>();
-            tmp.text = "↺ Restart";
-            tmp.fontSize = 20f;
+            tmp.text = label;
+            tmp.fontSize = 18f;
             tmp.fontStyle = FontStyles.Bold;
             tmp.color = Color.white;
             tmp.alignment = TextAlignmentOptions.Center;

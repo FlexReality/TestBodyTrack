@@ -54,6 +54,15 @@ namespace FlexReality.BodyTracking
             previousFlags = GestureFlags.None;
         }
 
+        // Reset all calibration state — call when a new player steps in or
+        // tracking looks off. Jump baseline re-learns within a few frames.
+        public void Recalibrate()
+        {
+            baselineHipY = -1f;
+            previousFlags = GestureFlags.None;
+            wasTracking = false;
+        }
+
         private void Update()
         {
             if (provider == null) return;
