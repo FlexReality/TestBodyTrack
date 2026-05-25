@@ -124,7 +124,10 @@ namespace FlexReality.BodyTracking
             }
             Vector3 velocity = (targetPos - spawnPos).normalized * speed;
 
-            var prefab = PickPrefabForDirection(dir);
+            // Math lanes (Front/Left/Right) always use a plain cube — food prefabs
+            // are only for the Bottom jump-dodge lane where the mesh stays visible.
+            bool isMathLaneSpawn = (dir != ObstacleDirection.Bottom);
+            var prefab = isMathLaneSpawn ? obstaclePrefab : PickPrefabForDirection(dir);
             bool usingFallback = (prefab == obstaclePrefab);
 
             var go = Instantiate(prefab, spawnPos, Quaternion.identity);
@@ -142,10 +145,8 @@ namespace FlexReality.BodyTracking
             if (oc == null) oc = go.AddComponent<ObstacleController>();
             oc.Launch(dir, velocity, targetPos, playerTarget);
 
-            // Math answers on Front/Left/Right lanes only.
-            bool isMathLane = (dir != ObstacleDirection.Bottom);
             var session = GameSession.Instance;
-            if (isMathLane && session != null)
+            if (isMathLaneSpawn && session != null)
             {
                 bool spawnCorrect = (_spawnsSinceCorrect >= 2);
                 if (spawnCorrect) _spawnsSinceCorrect = 0;
