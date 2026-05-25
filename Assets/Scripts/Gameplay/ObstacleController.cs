@@ -155,7 +155,9 @@ namespace FlexReality.BodyTracking
                 if (isCorrectNow)
                 {
                     GameSession.Instance.RegisterCorrectHit();
-                    FlashAndDestroy(new Color(0.3f, 1f, 0.4f), 0.2f);
+                    SpawnShards(new Color(0.3f, 1f, 0.4f));
+                    Destroy(gameObject, 0.55f);
+                    enabled = false;
                 }
                 else
                 {
@@ -167,6 +169,28 @@ namespace FlexReality.BodyTracking
 
             GameSession.Instance?.RegisterHit();
             FlashAndDestroy(new Color(1f, 0.95f, 0.4f), 0.12f);
+        }
+
+        // Spawns 8 small cubes that fly outward then fade — correct-answer burst.
+        private void SpawnShards(Color color)
+        {
+            velocity = Vector3.zero;
+            var shardMat = new Material(Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard"));
+            shardMat.color = color;
+
+            for (int i = 0; i < 8; i++)
+            {
+                var s = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                s.name = "Shard";
+                Destroy(s.GetComponent<Collider>());
+                s.transform.position   = transform.position;
+                s.transform.localScale = Vector3.one * Random.Range(0.15f, 0.3f);
+                s.GetComponent<MeshRenderer>().sharedMaterial = shardMat;
+                var anim = s.AddComponent<ShardAnim>();
+                anim.dir = Random.onUnitSphere;
+                anim.dir.z = Mathf.Abs(anim.dir.z) * -0.5f; // bias toward camera
+                Destroy(s, 0.5f);
+            }
         }
 
         private void FlashAndDestroy(Color flash, float duration)
@@ -195,6 +219,27 @@ namespace FlexReality.BodyTracking
             float k = Mathf.Clamp01(t / duration);
             transform.localScale = Vector3.Lerp(startScale, Vector3.zero, k);
             transform.Rotate(Vector3.up, 720f * Time.deltaTime);
+        }
+    }
+
+    // Flies a shard outward and shrinks it to nothing.
+    public class ShardAnim : MonoBehaviour
+    {
+        public Vector3 dir;
+        private float t;
+        private Vector3 startScale;
+        private const float Duration = 0.45f;
+        private const float Speed    = 6f;
+
+        private void Awake() => startScale = transform.localScale;
+
+        private void Update()
+        {
+            t += Time.deltaTime;
+            float k = t / Duration;
+            transform.position   += dir * Speed * Time.deltaTime * (1f - k);
+            transform.localScale  = Vector3.Lerp(startScale, Vector3.zero, k);
+            transform.Rotate(Vector3.one, 400f * Time.deltaTime);
         }
     }
 }

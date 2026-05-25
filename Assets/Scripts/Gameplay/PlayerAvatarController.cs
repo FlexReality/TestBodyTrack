@@ -105,24 +105,63 @@ namespace FlexReality.BodyTracking
 
         private void LaunchProjectile(Vector3 origin)
         {
+            // ---- Muzzle burst — ring that expands and fades at the shoot point ----
+            SpawnMuzzleFlash(origin);
+
+            // ---- Projectile ----
             var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             go.name = "AttackProjectile";
             go.transform.position = origin;
             go.transform.forward = avatarRoot.forward;
             go.transform.localScale = Vector3.one * (projectileVisualRadius * 2f);
 
-            // Remove default non-trigger collider — AttackProjectile adds its own.
             var defaultCol = go.GetComponent<Collider>();
             if (defaultCol != null) Destroy(defaultCol);
 
             var mr = go.GetComponent<MeshRenderer>();
-            if (mr != null) mr.material.color = new Color(1f, 0.88f, 0.1f, 1f);
+            if (mr != null)
+            {
+                var mat = new Material(Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard"));
+                mat.color = new Color(1f, 0.88f, 0.1f, 1f);
+                mat.SetFloat("_Smoothness", 0.7f);
+                mr.sharedMaterial = mat;
+            }
+
+            // Trail — yellow→transparent streak behind the ball.
+            var trail = go.AddComponent<TrailRenderer>();
+            trail.time        = 0.18f;
+            trail.startWidth  = projectileVisualRadius * 1.4f;
+            trail.endWidth    = 0f;
+            trail.numCapVertices = 4;
+            var trailMat = new Material(Shader.Find("Sprites/Default") ?? Shader.Find("Unlit/Color"));
+            trailMat.color = new Color(1f, 0.75f, 0.1f, 1f);
+            trail.material   = trailMat;
+            trail.startColor = new Color(1f, 0.85f, 0.1f, 1f);
+            trail.endColor   = new Color(1f, 0.5f,  0f,   0f);
 
             var proj = go.AddComponent<AttackProjectile>();
-            proj.speed = projectileSpeed;
+            proj.speed       = projectileSpeed;
             proj.maxDistance = projectileMaxDistance;
 
             Destroy(go, projectileMaxDistance / Mathf.Max(projectileSpeed, 1f) + 0.5f);
+        }
+
+        private void SpawnMuzzleFlash(Vector3 pos)
+        {
+            var flash = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            flash.name = "MuzzleFlash";
+            Destroy(flash.GetComponent<Collider>());
+            flash.transform.position   = pos;
+            flash.transform.localScale = Vector3.one * 0.05f;
+            var mr = flash.GetComponent<MeshRenderer>();
+            if (mr != null)
+            {
+                var mat = new Material(Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard"));
+                mat.color = new Color(1f, 0.95f, 0.3f);
+                mr.sharedMaterial = mat;
+            }
+            flash.AddComponent<MuzzleFlashAnim>();
+            Destroy(flash, 0.2f);
         }
 
         private void OnDrawGizmosSelected()
@@ -131,6 +170,28 @@ namespace FlexReality.BodyTracking
             Gizmos.color = new Color(1f, 0.9f, 0.1f, 0.5f);
             Gizmos.DrawWireSphere(avatarRoot.position + Vector3.up * chestHeight,
                 projectileVisualRadius);
+        }
+    }
+
+    // Quickly expands and fades the muzzle-flash sphere.
+    public class MuzzleFlashAnim : MonoBehaviour
+    {
+        private float t;
+        private const float Duration = 0.18f;
+
+        private void Update()
+        {
+            t += Time.deltaTime;
+            float k = t / Duration;
+            transform.localScale = Vector3.one * Mathf.Lerp(0.05f, 1.2f, k);
+            var mr = GetComponent<MeshRenderer>();
+            if (mr != null)
+            {
+                var c = mr.sharedMaterial.color;
+                c.a = Mathf.Lerp(1f, 0f, k);
+                mr.material.color = c;
+            }
+            if (t >= Duration) Destroy(gameObject);
         }
     }
 }
