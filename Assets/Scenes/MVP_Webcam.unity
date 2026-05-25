@@ -12299,8 +12299,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   providerBehaviour: {fileID: 635974185}
-  horizontalMagnitude: 0.6
-  verticalMagnitude: 0.25
+  horizontalMagnitude: 0
+  verticalMagnitude: 0.15
   swayLerpSpeed: 4
   invertHorizontal: 0
 --- !u!81 &1429655320
