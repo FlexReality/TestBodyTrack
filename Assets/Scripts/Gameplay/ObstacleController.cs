@@ -113,18 +113,8 @@ namespace FlexReality.BodyTracking
                     return;
                 }
 
-                // Original jump-dodge logic for Bottom obstacles.
-                if (Direction == ObstacleDirection.Bottom && playerRef != null
-                    && playerRef.position.y > dodgeHeightThreshold)
-                {
-                    GameSession.Instance?.RegisterHit();
-                    FlashAndDestroy(new Color(0.4f, 1f, 0.6f), 0.15f);
-                }
-                else
-                {
-                    GameSession.Instance?.RegisterMiss();
-                    FlashAndDestroy(new Color(0.9f, 0.2f, 0.2f), 0.18f);
-                }
+                // Bottom obstacles are visual only — jump is cosmetic, no scoring.
+                FlashAndDestroy(new Color(0.4f, 0.4f, 0.4f), 0.12f);
             }
         }
 
