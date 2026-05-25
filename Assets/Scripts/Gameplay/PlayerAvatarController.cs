@@ -1,13 +1,10 @@
-using System.Collections;
 using UnityEngine;
 
 namespace FlexReality.BodyTracking
 {
-    // Gestures move the avatar to a lane first, then fire a projectile:
-    //   LeftHandUp   → move left,   then shoot
-    //   RightHandUp  → move right,  then shoot
-    //   HandsForward → move centre, then shoot
-    //   Jump         → hop animation only, no scoring
+    // Lane movement follows body lean (hip position) — continuous, no gesture needed.
+    // Shooting is triggered by hand gestures (LeftHandUp / RightHandUp / HandsForward).
+    // Jump stays as a visual-only hop.
     public class PlayerAvatarController : MonoBehaviour
     {
         [Header("Refs")]
@@ -17,8 +14,6 @@ namespace FlexReality.BodyTracking
         [Header("Lane movement")]
         [SerializeField] private float laneOffset = 1.8f;
         [SerializeField] private float laneLerpSpeed = 8f;
-        [Tooltip("Seconds to wait after gesture before firing — lets the avatar reach the lane first.")]
-        [SerializeField] private float shootDelay = 0.35f;
 
         [Header("Jump (visual only)")]
         [SerializeField] private float jumpHeight = 1.6f;
@@ -55,19 +50,16 @@ namespace FlexReality.BodyTracking
         {
             switch (gesture)
             {
-                case GestureType.Jump:         Jump();                   break;
-                case GestureType.LeftHandUp:   StartCoroutine(MoveAndShoot(-1)); break;
-                case GestureType.RightHandUp:  StartCoroutine(MoveAndShoot(+1)); break;
-                case GestureType.HandsForward: StartCoroutine(MoveAndShoot(0));  break;
+                case GestureType.Jump:
+                    Jump();
+                    break;
+                // Hand gestures shoot from whatever lane the body is currently in.
+                case GestureType.LeftHandUp:
+                case GestureType.RightHandUp:
+                case GestureType.HandsForward:
+                    LaunchProjectile(avatarRoot.position + Vector3.up * chestHeight);
+                    break;
             }
-        }
-
-        // Move to lane, wait for avatar to settle, then fire.
-        private IEnumerator MoveAndShoot(int lane)
-        {
-            currentLane = lane;
-            yield return new WaitForSeconds(shootDelay);
-            LaunchProjectile(avatarRoot.position + Vector3.up * chestHeight);
         }
 
         private void Jump()
@@ -77,6 +69,15 @@ namespace FlexReality.BodyTracking
 
         private void Update()
         {
+            // Continuous lane from body lean — read flags every frame.
+            if (gestureDetector != null)
+            {
+                var flags = gestureDetector.CurrentGestures;
+                if ((flags & GestureFlags.MoveLeft) != 0)       currentLane = -1;
+                else if ((flags & GestureFlags.MoveRight) != 0) currentLane =  1;
+                else                                             currentLane =  0;
+            }
+
             // Lane lerp
             Vector3 target = basePos;
             target.x = currentLane * laneOffset;
