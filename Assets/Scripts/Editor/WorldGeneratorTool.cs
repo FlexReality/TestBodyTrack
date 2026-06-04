@@ -257,8 +257,8 @@ namespace FlexReality.BodyTracking.EditorTools
                 floor = GameObject.CreatePrimitive(PrimitiveType.Plane);
                 floor.name = "Floor";
             }
-            // 60m wide, 80m deep — well outside the runway in every direction.
-            floor.transform.localScale = new Vector3(6f, 1f, 8f);
+            // 60m wide, 160m deep — floor extends to Z≈90, past the road's far end.
+            floor.transform.localScale = new Vector3(6f, 1f, 16f);
             floor.transform.position   = new Vector3(0f, 0f, 10f);
             var mr = floor.GetComponent<MeshRenderer>();
             if (mr != null)
