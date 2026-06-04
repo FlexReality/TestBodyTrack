@@ -49,7 +49,7 @@ namespace FlexReality.BodyTracking
             if (session == null) return;
 
             if (scoreLabel != null)
-                scoreLabel.text = $"Score\n<size=72><b>{session.Score}</b></size>";
+                scoreLabel.text = $"Score: <size=72><b>{session.Score}</b></size>";
 
             if (livesLabel != null)
             {
