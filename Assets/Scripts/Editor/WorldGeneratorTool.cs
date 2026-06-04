@@ -371,18 +371,18 @@ namespace FlexReality.BodyTracking.EditorTools
             var urpLit = Shader.Find("Universal Render Pipeline/Lit");
             if (urpLit == null) urpLit = Shader.Find("Standard");
 
-            // Asphalt surface — 4.5 units wide, 90 deep.
+            // Asphalt surface — 6.5 units wide, 90 deep.
             var asphalt = GameObject.CreatePrimitive(PrimitiveType.Plane);
             asphalt.name = "Asphalt";
             asphalt.transform.SetParent(roadRoot.transform);
             asphalt.transform.position   = new Vector3(0f, 0.01f, 35f);
-            asphalt.transform.localScale = new Vector3(0.45f, 1f, 9f);
+            asphalt.transform.localScale = new Vector3(0.65f, 1f, 9f);
             ApplyColor(asphalt, new Color(0.18f, 0.18f, 0.18f), urpLit);
             Object.DestroyImmediate(asphalt.GetComponent<Collider>());
 
             // White edge lines.
-            CreateRoadLine(roadRoot.transform, -2.2f, urpLit, "EdgeLine_L");
-            CreateRoadLine(roadRoot.transform,  2.2f, urpLit, "EdgeLine_R");
+            CreateRoadLine(roadRoot.transform, -3.2f, urpLit, "EdgeLine_L");
+            CreateRoadLine(roadRoot.transform,  3.2f, urpLit, "EdgeLine_R");
         }
 
         private static void CreateRoadLine(Transform parent, float x, Shader shader, string goName)
